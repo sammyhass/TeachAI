@@ -1,24 +1,20 @@
 from random import random, randint
 class Matrix:
-    def __init__(self, rows, cols, data=-1, consecutive=False):
+    def __init__(self, rows, cols, data=-1):
         self.rows = rows
         self.cols = cols
-        if data == -1 and consecutive == False:
+        if data == -1:
             self.data = []
             for i in range(rows):
                 self.data.append([])
                 for j in range(cols):
                     self.data[i].append(0)
-        elif consecutive == True and self.rows == 1:
-            self.data = []
-            temp = list(range(0, self.cols))
-            self.data.append(temp)
         else:
             self.data = data
 
     # display matrix in readable way
     def __repr__(self):
-        return self.data
+        return str(self.data)
 
     # static add method
     @staticmethod
@@ -26,48 +22,46 @@ class Matrix:
         result = Matrix(a.rows, a.cols)
         if type(b) is Matrix:
             if a.rows != b.rows or a.cols != b.cols:
-                print("Error: Failed to add")
-                return
+                 Exception("Error: Failed to add")
+                 return
             for i in range(a.rows):
                 for j in range(a.cols):
                     result.data[i][j] = a.data[i][j] + b.data[i][j]
             return result
-        elif type(b) is int:
+        elif type(b) is float:
             for i in range(a.rows):
                 for j in range(a.cols):
                     result.data[i][j] += b
             return result
-        else:
-            print("Error: Failed to add")
-            return
+        else: 
+         Exception("Error: Failed to add")
+         return
 
     @staticmethod
     def mul(a, b):
         result = Matrix(a.rows, a.cols)
         if type(b) is Matrix:
             if a.rows != b.rows or a.cols != b.cols:
-                print("Error: Failed to multiply")
+                Exception("Error: Failed to multiply")
                 return
             for i in range(a.rows):
                 for j in range(a.cols):
                     result.data[i][j] = a.data[i][j] * b.data[i][j]
             return result
-        elif type(b) is int:
+        elif type(b) is float:
             for i in range(a.rows):
                 for j in range(a.cols):
-                    result.data[i][j] *= b
+                    result.data[i][j] = a.data[i][j] * b
             return result
         else:
-            print("Error: Failed to multiply")
-            return
+            Exception("Error: Failed to multiply")
 
     @staticmethod
     def sub(a, b):
         result = Matrix(a.rows, a.cols)
         if type(b) is Matrix:
             if a.rows != b.rows or a.cols != b.cols:
-                print("Error: Failed to subtract")
-                return
+                Exception("Error: Failed to subtract")
             for i in range(a.rows):
                 for j in range(a.cols):
                     result.data[i][j] = a.data[i][j] * b.data[i][j]
@@ -78,13 +72,13 @@ class Matrix:
                     result.data[i][j] *= b
             return result
         else:
-            print("Error: Failed to subtract")
+            Exception("Error: Failed to subtract")
             return
 
-    def randomize_dec(self, upper_bound):
+    def randomize_dec(self, ):
         for i in range(self.rows):
             for j in range(self.cols):
-                self.data[i][j] = random() * upper_bound
+                self.data[i][j] = random() * 2 - 1
 
     def randomize_int(self, lower_bound, upper_bound):
         for i in range(self.rows):
@@ -93,7 +87,7 @@ class Matrix:
 
     @staticmethod
     def transpose(a):
-        result = Matrix(a.cols, a.cols)
+        result = Matrix(a.cols, a.rows)
         for i in range(a.rows):
             for j in range(a.cols):
                 result.data[j][i] = a.data[i][j]
@@ -111,7 +105,7 @@ class Matrix:
     def matMul(a, b):
         result = Matrix(a.rows, b.cols)
         if a.cols != b.rows:
-            print("No. columns in A must be equal to cols in B")
+            Exception("columns in A must be equal to cols in B")
             return
         for i in range(result.rows):
             for j in range(result.cols):
