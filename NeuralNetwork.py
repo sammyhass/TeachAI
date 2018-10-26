@@ -20,6 +20,7 @@ class NeuralNetwork:
 		return prediction.data
 
 	def fit(self, xs, ys, lr):
+		print(xs)
 		for i in range(len(xs)):
 			print("Training {}/{}".format(i+1, len(xs)))
 			input_matrix = Matrix(self.architecture[0], 1, data=xs[i])
@@ -49,8 +50,7 @@ class NeuralNetwork:
 			inputs_T = Matrix.transpose(input_matrix)
 			weight_ih_deltas = Matrix.matMul(hidden_gradient, inputs_T)
 			self.ih = Matrix.add(self.ih, weight_ih_deltas)
-
-
+		print("Training Finished!")
 
 
 

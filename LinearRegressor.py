@@ -1,7 +1,8 @@
 class LinearRegressor:
 	def __repr__(self):
 		return "TeachAI.LinearRegressor()"
-
+		self.m = 0
+		self.b = 0
 	def fit(self, xs, ys):
 		sum_x = 0
 		sum_y = 0
@@ -22,4 +23,9 @@ class LinearRegressor:
 
 		m = num / den
 		b = mean_y - m * mean_x
+		self.m = m
+		self.b = b
 		return [m, b]
+
+	def predict(self, x):
+		return self.m * x + self.b
