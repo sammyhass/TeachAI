@@ -7,6 +7,7 @@ class NeuralNetwork:
 		self.ih.randomize_dec()
 		self.ho = Matrix(self.architecture[2], self.architecture[1])
 		self.ho.randomize_dec()
+		self.lr = lr
 
 	def __repr__(self):
 		return "NeuralNetwork({})".format(self.architecture)
@@ -21,7 +22,7 @@ class NeuralNetwork:
 
 	def fit(self, xs, ys, lr):
 		for i in range(len(xs)):
-			print("{}/{}".format(i+1, len(xs)))
+			print("Training {}/{}".format(i+1, len(xs)))
 			input_matrix = Matrix(self.architecture[0], 1, data=xs[i])
 			hidden_matrix = Matrix.matMul(self.ih, input_matrix)
 			hidden_activation = Matrix.apply(hidden_matrix, Activations.sigmoid)
