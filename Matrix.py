@@ -122,3 +122,11 @@ class Matrix:
             for j in range(matrix.cols):
                 result.data[i][j] = func(matrix.data[i][j])
         return result
+
+    @staticmethod
+    def createVector(a):
+        result = Matrix(len(a), 1)
+        for i in range(len(a)):
+            result.data[i][0] = a[i]
+
+        return result

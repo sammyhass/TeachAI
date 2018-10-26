@@ -20,15 +20,14 @@ class NeuralNetwork:
 		return prediction.data
 
 	def fit(self, xs, ys, lr):
-		print(xs)
 		for i in range(len(xs)):
 			print("Training {}/{}".format(i+1, len(xs)))
-			input_matrix = Matrix(self.architecture[0], 1, data=xs[i])
+			input_matrix = Matrix.createVector(xs[i])
 			hidden_matrix = Matrix.matMul(self.ih, input_matrix)
 			hidden_activation = Matrix.apply(hidden_matrix, Activations.sigmoid)
 			output_matrix = Matrix.matMul(self.ho, hidden_activation)
 			outputs = Matrix.apply(output_matrix, Activations.sigmoid)
-			target_matrix = Matrix(self.architecture[2], 1, data=ys[i])
+			target_matrix = Matrix.createVector(ys[i])
 			output_errors = Matrix.sub(target_matrix, outputs)
 			gradients = Matrix.apply(outputs, Activations.sigmoid)
 			gradients = Matrix.mul(gradients, output_errors)
