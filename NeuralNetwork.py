@@ -1,13 +1,12 @@
 from .Matrix import Matrix
 from . import Activations
 class NeuralNetwork:
-	def __init__(self, architecture=[2, 4, 2], lr=0.01):
+	def __init__(self, architecture=[2, 4, 2]):
 		self.architecture = architecture
 		self.ih = Matrix(self.architecture[1], self.architecture[0])
 		self.ih.randomize_dec()
 		self.ho = Matrix(self.architecture[2], self.architecture[1])
 		self.ho.randomize_dec()
-		self.lr = lr
 
 	def __repr__(self):
 		return "NeuralNetwork({})".format(self.architecture)
