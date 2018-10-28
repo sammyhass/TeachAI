@@ -1,4 +1,5 @@
 import math
+import random
 def mean(xs):
 	tot = 0
 	for i in range(len(xs)):
@@ -25,4 +26,16 @@ def argmax(xs):
 		if xs[i] > maxi:
 			maxi = i
 	return maxi
+
+def scramble(a, b):
+	ar = []
+	br = []
+	if len(a) != len(b):
+		Exception("Length of arrays must be the same")
+	follow = [i for i in range(len(a))]
+	random.shuffle(follow)
+	for i in range(len(follow)):
+		ar.append(a[follow[i]])
+		br.append(b[follow[i]])
+	return ar, br
 

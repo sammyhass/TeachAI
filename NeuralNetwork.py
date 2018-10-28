@@ -1,55 +1,74 @@
 from .Matrix import Matrix
 from . import Activations
+from . import Stats
+
 class NeuralNetwork:
-	def __init__(self, architecture=[2, 4, 2]):
-		self.architecture = architecture
-		self.ih = Matrix(self.architecture[1], self.architecture[0])
-		self.ih.randomize_dec()
-		self.ho = Matrix(self.architecture[2], self.architecture[1])
-		self.ho.randomize_dec()
 
-	def __repr__(self):
-		return "NeuralNetwork({})".format(self.architecture)
+	def __init__(self, input_nodes, hidden_nodes, output_nodes):
+		self.input_nodes = input_nodes
+		self.hidden_nodes = hidden_nodes
+		self.output_nodes = output_nodes
 
-	def predict(self, inputs):
-		input_matrix = Matrix(self.architecture[0], 1, data=inputs)
-		hidden_matrix = Matrix.matMul(self.ih, input_matrix)
-		hidden_matrix_activation = Matrix.apply(hidden_matrix, Activations.sigmoid)
-		output_matrix = Matrix.matMul(self.ho, hidden_matrix_activation)
-		prediction = Matrix.apply(output_matrix, Activations.sigmoid)
-		return prediction.data
+		self.weights_ih = Matrix(self.hidden_nodes, self.input_nodes)
+		self.weights_ho = Matrix(self.output_nodes, self.hidden_nodes)
+		self.weights_ih.randomize()
+		self.weights_ho.randomize()
 
-	def fit(self, xs, ys, lr):
-		for i in range(len(xs)):
-			print("Training {}/{}".format(i+1, len(xs)))
-			input_matrix = Matrix.createVector(xs[i])
-			hidden_matrix = Matrix.matMul(self.ih, input_matrix)
-			hidden_activation = Matrix.apply(hidden_matrix, Activations.sigmoid)
-			output_matrix = Matrix.matMul(self.ho, hidden_activation)
-			outputs = Matrix.apply(output_matrix, Activations.sigmoid)
-			target_matrix = Matrix.createVector(ys[i])
-			output_errors = Matrix.sub(target_matrix, outputs)
-			gradients = Matrix.apply(outputs, Activations.sigmoid)
-			gradients = Matrix.mul(gradients, output_errors)
+		self.bias_h = Matrix(self.hidden_nodes, 1)
+		self.bias_o = Matrix(self.output_nodes, 1)
+		self.bias_h.randomize()
+		self.bias_o.randomize()
 
-			gradients = Matrix.mul(gradients, lr)
+	def predict(self, input_list):
+		inputs = Matrix.from_list(input_list)
+		hidden = Matrix.multiply(self.weights_ih, inputs)
+		hidden.add(self.bias_h)
+		hidden.map(Activations.sigmoid)
 
-			hidden_T = Matrix.transpose(hidden_activation)
-			weight_ho_deltas = Matrix.matMul(gradients, hidden_T);
-			self.ho = Matrix.add(self.ho, weight_ho_deltas)
+		output = Matrix.multiply(self.weights_ho, hidden)
+		output.add(self.bias_o)
+		output.map(Activations.sigmoid)
+		return output.to_list()
 
-			who_t = Matrix.transpose(self.ho)
-			hidden_errors = Matrix.matMul(who_t, output_errors)
+	def fit(self, xs, ys, lr=0.01, epochs=10):
+		for epoch in range(epochs):
+			xs, ys = Stats.scramble(xs, ys)
+			print("Training, {}/{}".format(epoch+1, epochs))
+			for i in range(len(xs)):
+				inputs = Matrix.from_list(xs[i])
+				hidden = Matrix.multiply(self.weights_ih, inputs)
+				hidden.add(self.bias_h)
+				hidden.map(Activations.sigmoid)
 
-			hidden_gradient = Matrix.apply(hidden_activation, Activations.sigmoid)
+				outputs = Matrix.multiply(self.weights_ho, hidden)
+				outputs.add(self.bias_o)
+				outputs.map(Activations.sigmoid)
 
-			hidden_gradient = Matrix.mul(hidden_gradient, hidden_errors)
-			hidden_gradient = Matrix.mul(hidden_gradient, lr)
+				targets = Matrix.from_list(ys[i])
+				output_errors = Matrix.subtract(targets, outputs)
+				gradients = Matrix.map_s(outputs, Activations.dsigmoid)
+				gradients.mul(output_errors)
+				gradients.mul(lr)
 
-			inputs_T = Matrix.transpose(input_matrix)
-			weight_ih_deltas = Matrix.matMul(hidden_gradient, inputs_T)
-			self.ih = Matrix.add(self.ih, weight_ih_deltas)
-		print("Training Finished!")
+				hidden_T = Matrix.transpose(hidden)
+				weights_ho_deltas = Matrix.multiply(gradients, hidden_T)
+
+				self.weights_ho.add(weights_ho_deltas)	
+				self.bias_o.add(gradients)	
+
+				who_t = Matrix.transpose(self.weights_ho)  
+				hidden_errors = Matrix.multiply(who_t, output_errors)
+
+				hidden_gradient = Matrix.map_s(hidden, Activations.dsigmoid)
+
+				hidden_gradient.mul(hidden_errors)
+				hidden_gradient.mul(lr)
+
+				inputs_T = Matrix.transpose(inputs)
+				weights_ih_deltas = Matrix.multiply(hidden_gradient, inputs_T)
+
+				self.weights_ih.add(weights_ih_deltas)
+				self.bias_h.add(hidden_gradient)	
 
 
 

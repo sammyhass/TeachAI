@@ -1,112 +1,49 @@
 from random import random, randint
 class Matrix:
-    def __init__(self, rows, cols, data=-1):
+    def __init__(self, rows, cols):
         self.rows = rows
         self.cols = cols
-        if data == -1:
-            self.data = []
-            for i in range(rows):
-                self.data.append([])
-                for j in range(cols):
-                    self.data[i].append(0)
-        else:
-            self.data = data
+        self.data = []
 
-    # display matrix in readable way
+        for i in range(self.rows):
+            self.data.append([])
+            for j in range(cols):
+                self.data[i].append(0)
+                
     def __repr__(self):
-        return str(self.data)
-
-    # static add method
-    @staticmethod
-    def add(a, b):
-        result = Matrix(a.rows, a.cols)
-        if type(b) is Matrix:
-            if a.rows != b.rows or a.cols != b.cols:
-                 Exception("Error: Failed to add")
-                 return
-            for i in range(a.rows):
-                for j in range(a.cols):
-                    result.data[i][j] = a.data[i][j] + b.data[i][j]
-            return result
-        elif type(b) is float:
-            for i in range(a.rows):
-                for j in range(a.cols):
-                    result.data[i][j] += b
-            return result
-        else: 
-         Exception("Error: Failed to add")
-         return
+        return_string = "Matrix(\n"
+        for i in range(len(self.data)):
+            return_string += str(self.data[i]) + "\n"
+        return return_string + ")"
 
     @staticmethod
-    def mul(a, b):
-        result = Matrix(a.rows, a.cols)
-        if type(b) is Matrix:
-            if a.rows != b.rows or a.cols != b.cols:
-                Exception("Error: Failed to multiply")
-                return
-            for i in range(a.rows):
-                for j in range(a.cols):
-                    result.data[i][j] = a.data[i][j] * b.data[i][j]
-            return result
-        elif type(b) is float:
-            for i in range(a.rows):
-                for j in range(a.cols):
-                    result.data[i][j] = a.data[i][j] * b
-            return result
-        else:
-            Exception("Error: Failed to multiply")
-
-    @staticmethod
-    def sub(a, b):
-        result = Matrix(a.rows, a.cols)
-        if type(b) is Matrix:
-            if a.rows != b.rows or a.cols != b.cols:
-                Exception("Error: Failed to subtract")
-            for i in range(a.rows):
-                for j in range(a.cols):
-                    result.data[i][j] = a.data[i][j] * b.data[i][j]
-            return result
-        elif type(b) is int:
-            for i in range(a.rows):
-                for j in range(a.cols):
-                    result.data[i][j] *= b
-            return result
-        else:
-            Exception("Error: Failed to subtract")
-            return
-
-    def randomize_dec(self, ):
+    def from_list(arr):
+        m = Matrix(len(arr), 1)
+        for i in range(len(arr)):
+            m.data[i][0] = arr[i]
+        return m
+    
+    def to_list(self):
+        arr = []
         for i in range(self.rows):
             for j in range(self.cols):
-                self.data[i][j] = random() * 2 - 1
-
-    def randomize_int(self, lower_bound, upper_bound):
-        for i in range(self.rows):
-            for j in range(self.cols):
-                self.data[i][j] = randint(lower_bound, upper_bound)
+                arr.append(self.data[i][j])
+        return arr
 
     @staticmethod
     def transpose(a):
         result = Matrix(a.cols, a.rows)
         for i in range(a.rows):
-            for j in range(a.cols):
-                result.data[j][i] = a.data[i][j]
+                for j in range(a.cols):
+                    result.data[j][i] = a.data[i][j]
         return result
 
-    def alter(self, index: list, num: int):
-        self.data[index[0]][index[1]] = num
-
-    def to_zero(self):
-        for i in self.rows:
-            for j in self.cols:
-                self.data[i][j] = 0
-
     @staticmethod
-    def matMul(a, b):
-        result = Matrix(a.rows, b.cols)
+    def multiply(a, b):
         if a.cols != b.rows:
-            Exception("columns in A must be equal to cols in B")
+            raise Exception("Columns of a must match rows of b")
             return
+        result = Matrix(a.rows, b.cols)
         for i in range(result.rows):
             for j in range(result.cols):
                 sum = 0
@@ -116,17 +53,51 @@ class Matrix:
         return result
 
     @staticmethod
-    def apply(matrix, func):
-        result = Matrix(matrix.rows, matrix.cols)
-        for i in range(matrix.rows):
-            for j in range(matrix.cols):
-                result.data[i][j] = func(matrix.data[i][j])
+    def subtract(a, b):
+        result = Matrix(a.rows, a.cols)
+        for i in range(a.rows):
+            for j in range(a.cols):
+                result.data[i][j] = a.data[i][j] - b.data[i][j]
         return result
 
-    @staticmethod
-    def createVector(a):
-        result = Matrix(len(a), 1)
-        for i in range(len(a)):
-            result.data[i][0] = a[i]
+    def mul(self, n):
+        if isinstance(n, Matrix):
+            for i in range(len(self.data)):
+                for j in range(len(self.data[i])):
+                    self.data[i][j] *= n.data[i][j]
+        else:
+            for i in range(len(self.data)):
+                for j in range(len(self.data[i])):
+                    self.data[i][j] *= n
 
-        return result
+    def add(self, n):
+        if isinstance(n, Matrix):
+            for i in range(len(self.data)):
+                for j in range(len(self.data[i])):
+                    self.data[i][j] += n.data[i][j]
+        else:           
+            for i in range(len(self.data)):
+                for j in range(len(self.data[i])):
+                    self.data[i][j] += n
+
+    def randomize(self):
+        for i in range(len(self.data)):
+            for j in range(len(self.data[i])):
+                self.data[i][j] = random() * 2 - 1
+
+
+    def map(self, func):
+        for i in range(len(self.data)):
+            for j in range(len(self.data[i])):
+                val = self.data[i][j]
+                self.data[i][j] = func(val)
+
+    def map_s(a, func):
+        result = Matrix(a.rows, a.cols)
+        for i in range(a.rows):
+            for j in range(a.cols):
+                val = a.data[i][j]
+                result.data[i][j] = func(val)
+        return result        
+
+
