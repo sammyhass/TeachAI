@@ -22,8 +22,9 @@ def max(xs):
 
 def argmax(xs):
 	maxi = 0
+	maxx = xs[0]
 	for i in range(len(xs)):
-		if xs[i] > maxi:
+		if xs[i] > maxx:
 			maxi = i
 	return maxi
 
