@@ -26,6 +26,7 @@ def argmax(xs):
 	for i in range(len(xs)):
 		if xs[i] > maxx:
 			maxi = i
+			maxx = xs[i]
 	return maxi
 
 def scramble(a, b):
