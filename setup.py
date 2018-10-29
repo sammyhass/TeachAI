@@ -9,7 +9,7 @@ setup(
   author = 'Sammy Hass',                   # Type in your name
   author_email = 'sammy.hass@outlook.com',      # Type in your E-Mail
   url = 'https://github.com/SammyHass/TeachAI',   # Provide either the link to your github or to your website
-  download_url = 'https://github.com/SammyHass/TeachAI/archive/0.1.2.zip',    # I explain this later on
+  download_url = 'https://github.com/SammyHass/TeachAI/archive/0.1.3.zip',    # I explain this later on
   keywords = ['AI', 'ML', 'Learning'],   # Keywords that define your package best
   classifiers=[
     'Development Status :: 3 - Alpha',      # Chose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package
