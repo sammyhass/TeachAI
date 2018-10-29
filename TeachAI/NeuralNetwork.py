@@ -23,11 +23,11 @@ class NeuralNetwork:
 		inputs = Matrix.from_list(input_list)
 		hidden = Matrix.multiply(self.weights_ih, inputs)
 		hidden.add(self.bias_h)
-		hidden.map(Activations.sigmoid)
+		hidden.map(activations.sigmoid)
 
 		output = Matrix.multiply(self.weights_ho, hidden)
 		output.add(self.bias_o)
-		output.map(Activations.sigmoid)
+		output.map(activations.sigmoid)
 		return output.to_list()
 
 	def fit(self, xs, ys, lr=0.01, epochs=10):
@@ -38,15 +38,15 @@ class NeuralNetwork:
 				inputs = Matrix.from_list(xs[i])
 				hidden = Matrix.multiply(self.weights_ih, inputs)
 				hidden.add(self.bias_h)
-				hidden.map(Activations.sigmoid)
+				hidden.map(activations.sigmoid)
 
 				outputs = Matrix.multiply(self.weights_ho, hidden)
 				outputs.add(self.bias_o)
-				outputs.map(Activations.sigmoid)
+				outputs.map(activations.sigmoid)
 
 				targets = Matrix.from_list(ys[i])
 				output_errors = Matrix.subtract(targets, outputs)
-				gradients = Matrix.map_s(outputs, Activations.dsigmoid)
+				gradients = Matrix.map_s(outputs, activations.dsigmoid)
 				gradients.mul(output_errors)
 				gradients.mul(lr)
 
@@ -59,7 +59,7 @@ class NeuralNetwork:
 				who_t = Matrix.transpose(self.weights_ho)  
 				hidden_errors = Matrix.multiply(who_t, output_errors)
 
-				hidden_gradient = Matrix.map_s(hidden, Activations.dsigmoid)
+				hidden_gradient = Matrix.map_s(hidden, activations.dsigmoid)
 
 				hidden_gradient.mul(hidden_errors)
 				hidden_gradient.mul(lr)
