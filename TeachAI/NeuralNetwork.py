@@ -1,6 +1,6 @@
 from .Matrix import Matrix
 from . import Activations
-from . import Stats
+from . import stats
 
 class NeuralNetwork:
 
