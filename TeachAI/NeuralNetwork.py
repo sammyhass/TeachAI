@@ -32,7 +32,7 @@ class NeuralNetwork:
 
 	def fit(self, xs, ys, lr=0.01, epochs=10):
 		for epoch in range(epochs):
-			xs, ys = Stats.scramble(xs, ys)
+			xs, ys = stats.scramble(xs, ys)
 			print("Training, {}/{}".format(epoch+1, epochs))
 			for i in range(len(xs)):
 				inputs = Matrix.from_list(xs[i])
