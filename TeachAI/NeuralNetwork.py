@@ -1,5 +1,5 @@
 from .Matrix import Matrix
-from . import Activations
+from . import activations
 from . import stats
 
 class NeuralNetwork:
