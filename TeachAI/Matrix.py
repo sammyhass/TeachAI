@@ -16,6 +16,22 @@ class Matrix:
             return_string += str(self.data[i]) + "\n"
         return return_string + ")"
 
+    def __getitem__(self, i):
+        return self.data[i]
+    def __setitem__(self, i, val):
+        self.data[i] = val
+
+    @staticmethod
+    def identity(dim):
+        result = Matrix(dim, dim)
+        j = 0
+        for i in range(result.rows):
+            result.data[i][j] = 1
+            j += 1
+        return result
+
+
+
     @staticmethod
     def from_list(arr):
         m = Matrix(len(arr), 1)
