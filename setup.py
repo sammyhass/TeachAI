@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
   name = 'TeachAI',         # How you named your package folder (MyLib)
   packages = ['TeachAI'],   # Chose the same as "name"
-  version = '0.1.3',      # Start with a small number and increase it with every change you make
+  version = '0.2.0',      # Start with a small number and increase it with every change you make
   license='MIT',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
   description = 'Library for teaching AI/ML',
   long_description = 'Library for teaching AI/ML',   # Give a short description about your library
