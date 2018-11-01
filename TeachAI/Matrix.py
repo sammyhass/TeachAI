@@ -18,16 +18,18 @@ class Matrix:
 
     def __getitem__(self, i):
         return self.data[i]
+    
     def __setitem__(self, i, val):
         self.data[i] = val
+    
+    def __len__(self):
+        return self.rows * self.cols
 
     @staticmethod
     def identity(dim):
         result = Matrix(dim, dim)
-        j = 0
         for i in range(result.rows):
-            result.data[i][j] = 1
-            j += 1
+            result.data[j][j] = 1
         return result
 
 
