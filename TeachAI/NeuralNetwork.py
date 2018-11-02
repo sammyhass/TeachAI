@@ -19,6 +19,9 @@ class NeuralNetwork:
 		self.bias_h.randomize()
 		self.bias_o.randomize()
 
+	def __repr__(self):
+		return "TeachAI.NeuralNetwork({}, {}, {})".format(self.input_nodes, self.hidden_nodes, self.output_nodes)
+	
 	def predict(self, input_list):
 		inputs = Matrix.from_list(input_list)
 		hidden = Matrix.multiply(self.weights_ih, inputs)
