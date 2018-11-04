@@ -18,12 +18,13 @@ def tanh(x):
 
 def softmax(mat):
 	total = 0
+	result = Matrix(1, 1)
 	if isinstance(mat, Matrix):
 		if mat.cols == 1:
 			for i in range(mat.rows):
-				total += mat[i][0]
+				total += math.exp(mat[i][0])
 	result = Matrix(mat.rows, 1)
 	for i in range(mat.rows):
-		result.data[i][0] = mat[i][0] / total
+		result.data[i][0] = math.exp(mat[i][0]) / total
 	return result
- 
+
